@@ -1,0 +1,11 @@
+# Distribution
+dist/
+
+# Node modules
+node_modules/
+
+# Assets
+internal/assets/
+
+# Cache
+.awcache/

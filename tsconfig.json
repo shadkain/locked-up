@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "outDir": "./dist/",
+      "baseUrl": "./public/",
+      "noImplicitAny": true,
+      "target": "es6",
+      "lib": [
+        "es5",
+        "es6",
+        "dom"
+      ],
+      "allowJs": true
+    },
+
+    "awesomeTypescriptLoaderOptions": {
+      "useCache": true
+    }
+}
