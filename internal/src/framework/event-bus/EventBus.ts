@@ -1,10 +1,15 @@
-type Identifier = string;
-type Handler = (data: {}) => void;
+import IEventBus, { Handler } from './IEventBus';
+
 type Channel = Set<Handler>;
 
-export default class EventBus {
-    private _channels: Map<string, Channel>;
+/** Publisher-subscriber event service. */
+export default class EventBus<K>
+implements IEventBus<K> {
+    private _channels: Map<K, Channel>;
 
+    /**
+     * Creates event bus instance.
+     */
     constructor() {
         this._channels = new Map();
     }
@@ -14,7 +19,7 @@ export default class EventBus {
      * @param channelName Name of channel to subscribe.
      * @param handler Publish handler.
      */
-    subscribe(channelName: Identifier, handler: Handler) {
+    subscribe(channelName: K, handler: Handler) {
         let channel = this._channels.get(channelName);
         if (!channel) {
             channel = new Set();
@@ -29,18 +34,24 @@ export default class EventBus {
      * @param channelName Name of channel to unsubscribe.
      * @param handler Publish handler.
      */
-    unsubscribe(channelName: Identifier, handler: Handler): boolean {
+    unsubscribe(channelName: K, handler: Handler): boolean {
         let channel = this._channels.get(channelName);
         if (!channel) return;
 
-        return channel.delete(handler);
+        const flag = channel.delete(handler);
+
+        if (!channel.size) {
+            this.dropChannel(channelName);
+        }
+
+        return flag;
     }
 
     /**
      * Drops specified channel. Returns deletion success flag.
      * @param channelName Name of channel to drop.
      */
-    dropChannel(channelName: Identifier): boolean {
+    dropChannel(channelName: K): boolean {
         return this._channels.delete(channelName);
     }
 
@@ -49,7 +60,7 @@ export default class EventBus {
      * @param channelName Name of channel to publish to.
      * @param data Data to pass into each handler.
      */
-    publish(channelName: Identifier, data: {}) {
+    publish(channelName: K, data: {}) {
         const channel = this._channels.get(channelName);
 
         channel.forEach(handler => handler(data));
