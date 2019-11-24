@@ -1,6 +1,7 @@
 export type Handler = (data: {}) => void;
 
-export default interface IEventBus<K> {
+/** Publisher-subscriber event service. */
+export interface IEventBus<K> {
     /**
      * Subscribes on specified channel. If channel doesn't exist, creates it.
      * @param channelName Name of channel to subscribe.

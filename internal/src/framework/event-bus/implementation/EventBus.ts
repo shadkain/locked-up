@@ -1,9 +1,9 @@
-import IEventBus, { Handler } from './IEventBus';
+import { IEventBus, Handler } from '../interface/IEventBus';
 
 type Channel = Set<Handler>;
 
-/** Publisher-subscriber event service. */
-export default class EventBus<K>
+/** Publisher-subscriber event service implementation. */
+export class EventBus<K>
 implements IEventBus<K> {
     private _channels: Map<K, Channel>;
 
@@ -19,7 +19,7 @@ implements IEventBus<K> {
      * @param channelName Name of channel to subscribe.
      * @param handler Publish handler.
      */
-    subscribe(channelName: K, handler: Handler) {
+    public subscribe(channelName: K, handler: Handler) {
         let channel = this._channels.get(channelName);
         if (!channel) {
             channel = new Set();
@@ -34,7 +34,7 @@ implements IEventBus<K> {
      * @param channelName Name of channel to unsubscribe.
      * @param handler Publish handler.
      */
-    unsubscribe(channelName: K, handler: Handler): boolean {
+    public unsubscribe(channelName: K, handler: Handler): boolean {
         let channel = this._channels.get(channelName);
         if (!channel) return;
 
@@ -51,7 +51,7 @@ implements IEventBus<K> {
      * Drops specified channel. Returns deletion success flag.
      * @param channelName Name of channel to drop.
      */
-    dropChannel(channelName: K): boolean {
+    public dropChannel(channelName: K): boolean {
         return this._channels.delete(channelName);
     }
 
@@ -60,7 +60,7 @@ implements IEventBus<K> {
      * @param channelName Name of channel to publish to.
      * @param data Data to pass into each handler.
      */
-    publish(channelName: K, data: {}) {
+    public publish(channelName: K, data: {}) {
         const channel = this._channels.get(channelName);
 
         channel.forEach(handler => handler(data));
