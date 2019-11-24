@@ -1,18 +1,9 @@
-class Application {
-    /**
-     * Root element of application.
-     */
-    get root(): HTMLDivElement {
-        let root: HTMLDivElement = document.querySelector('#root');
-        if (!root) {
-            root = document.createElement('div');
-            root.id = 'root';
+import { IEventBus, EventBus } from '../event-bus/export';
 
-            document.body.insertAdjacentElement('afterbegin', root);
-        }
+export default class Application {
+    private _eventBus = new EventBus<number>();
 
-        return root;
+    get eventBus(): IEventBus<number> {
+        return this._eventBus;
     }
 }
-
-export default new Application();
